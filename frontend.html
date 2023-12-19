@@ -1,0 +1,62 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>City</th>
+            <th>Phone No.</th>
+            <th>Salary</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="records"></tbody>
+</table>
+
+
+<script>
+
+url = "http://localhost:8989/employees"
+
+function deleteEmp(id) {
+    // url?id=adfasdf
+
+    flag = confirm("Are your sure you want to delete this record?")
+
+    if(flag == true) {
+        fetch(`${url}?id=${id}`, { method: "DELETE" })
+        .then(res => res.json())
+        .then(res => {
+            window.location.reload()
+        })
+    }
+}
+
+
+fetch(url)
+.then(res => res.json())
+.then(res => {
+    console.log(res)
+    console.table(res)
+
+    output = ''
+
+    for(let i = 0; i < res.length; i++) {
+
+        output += `<tr>
+            <td>${res[i]['name']}</td>
+            <td>${res[i]['address']}</td>
+            <td>${res[i]['contact_number']}</td>
+            <td>${res[i]['salary']}</td>
+            <td>
+                <button class="btn btn-danger" onclick="deleteEmp('${res[i]._id}')">Delete</button>
+                <button class="btn btn-info" onclick="deleteEmp('${res[i]._id}')">Edit</button>
+            </td>
+            </tr>`
+    }
+
+    document.getElementById("records").innerHTML = output
+})
+
+</script>

@@ -1,0 +1,36 @@
+Name: <input type="text" id="name"> <br>
+Salary: <input type="text" id="salary"> <br>
+<button onclick="postData()">Submit</button>
+
+<script>
+
+function postData() {
+
+    data = {
+        "name" : document.getElementById("name").value,
+        "contact_number":"9833910512",
+        "address":"mumbai",
+        "salary": document.getElementById("salary").value,
+        "employee_id":98829,
+        "role":"operations"
+    }
+
+    url = "http://localhost:8989/employees"
+
+    fetch(url, { 
+        method: "POST",
+        headers: {
+		  'Accept': 'application/json',
+		  'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data) 
+    })
+    .then(res => res.json())
+    .then(res => {
+        window.location.href = 'frontend.html'
+    })
+
+}
+
+
+</script>
