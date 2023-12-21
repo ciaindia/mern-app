@@ -1,0 +1,56 @@
+<h1>Edit Employee</h1>
+
+Name: <input type="text" id="name"> <br>
+Salary: <input type="text" id="salary"> <br>
+<button onclick="putData()">Update</button>
+<a href="./frontend.html">Cancel</a>
+
+<script>
+/*Read query string parameters in vanilla javascript [start]*/
+const urlParams = new URLSearchParams(window.location.search);
+const id = urlParams.get('id');
+// alert(id)
+/*Read query string parameters in vanilla javascript [end]*/
+
+function putData() {
+
+    data = {
+        "id": id,
+        "name" : document.getElementById('name').value,
+        "salary": document.getElementById('salary').value
+    }
+
+    url = "http://localhost:8989/employees"
+
+    fetch(url, { 
+        method: "PUT",
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data) 
+    })
+    .then(res => res.json())
+    .then(res => {
+        window.location.href = 'frontend.html'
+    })
+
+}
+
+
+url = `http://localhost:8989/employees/${id}`
+
+fetch(url)
+.then(res => res.json())
+.then(res => {
+    console.log(res)
+
+    document.getElementById('name').value = res['name']
+    document.getElementById('salary').value = res['salary']
+})
+
+
+
+
+
+</script>

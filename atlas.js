@@ -10,13 +10,6 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
-
-
-
-
-
-
-
 const empSchema = new mongoose.Schema(    {
     name: String,
     contact_number: String,
@@ -26,23 +19,10 @@ const empSchema = new mongoose.Schema(    {
     role: String
 });
 
-
-
-
-
-
-
-
-
-
-
-
 const emp = new mongoose.model("emps", empSchema);
-
 
 var cors = require('cors')
 app.use(cors())
-
 
 app.get("/employees", async (req, res) => {
     // var data = [{name: "hari", salary: 25000}, {name: "sameer", salary: 23000}]
@@ -50,17 +30,28 @@ app.get("/employees", async (req, res) => {
     res.send(data)
 })
 
+//fetch single document by id
+//http://localhost:8989/employees/657d397eea713389134d1ffa
 
+app.get("/employees/:id", async (req, res) => {
+    // console.log(req.params)
+    let data = await emp.find({_id: req.params['id']});
+    res.send(data[0])
+})
 
+//update document by id
+app.put("/employees", async (req, res) => {
 
+	let u_data = await emp.updateOne({"_id": req.body.id}, {
+		"$set": {
+			"name" : req.body.name,
+			"salary" : req.body.salary,
+		}
+	});
+	
+	res.send(u_data);
 
-
-
-
-
-
-
-
+})
 
 
 //http://localhost:8989/employees?id=657d397eea713389134d1ffe
@@ -68,25 +59,6 @@ app.delete("/employees", async (req, res) => {
     let d_data = await emp.deleteOne({"_id": req.query['id']});
 	res.send(d_data);
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 app.post("/employees", async (req, res) => {
 
@@ -106,10 +78,6 @@ app.post("/employees", async (req, res) => {
 	res.send(doc);
 
 })
-
-
-
-
 
 app.listen(8989, () => {
 	console.log("listening 8989...");
